@@ -16,7 +16,7 @@ export default function Home() {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user && !user.emailVerified) {
         alert("Please verify your email to access this feature.");
-        navigation.push('/test'); 
+        navigation.push('/'); 
         signOut(auth);
       } else if (user && user.emailVerified) {
         setUser({ email: user.email as string });
@@ -47,7 +47,7 @@ export default function Home() {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       if (userCredential.user.emailVerified) {
-        navigation.push('/');
+        navigation.push('/test');
       } else {
         alert('Please verify your email first.');
         await signOut(auth);
