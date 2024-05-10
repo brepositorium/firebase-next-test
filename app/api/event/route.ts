@@ -14,12 +14,7 @@ export async function GET(request: NextRequest) {
     const eventName = request.nextUrl.searchParams.get('eventName');
     
     if (!eventName) {
-        return new NextResponse(JSON.stringify({ error: 'Event name is required' }), {
-            status: 400,
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
+        return response;
     }
 
     try {
@@ -28,27 +23,12 @@ export async function GET(request: NextRequest) {
         const querySnapshot = await getDocs(q);
         
         if (querySnapshot.empty) {
-            return new NextResponse(JSON.stringify({ error: 'No event found with the specified name' }), {
-                status: 404,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+            return response;
         }
 
         const events = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        return new NextResponse(JSON.stringify(events), {
-            status: 200,
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
+        return response;
     } catch (error) {
-        return new NextResponse(JSON.stringify({ error }), { // Better error handling
-            status: 500,
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
+        return response;
     }
 }
