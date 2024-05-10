@@ -15,8 +15,10 @@ function runMiddleware(request: NextRequest, fn: any) {
   return new Promise((resolve, reject) => {
     fn(request, (result: any) => {
       if (result instanceof Error) {
+        console.log("reject " + reject + "x!?" + resolve(result) + "y!?" + result)
         return reject(result)
       }
+      console.log("resolve " + resolve + "x!?" + resolve(result) + "y!?" + result)
       return resolve(result)
     })
   })
@@ -24,6 +26,7 @@ function runMiddleware(request: NextRequest, fn: any) {
 
 export async function GET(request: NextRequest) {
     // Run the CORS middleware
+    console.log("cors " + cors + "corsreq " + request)
     await runMiddleware(request, cors);
 
     const eventName = request.nextUrl.searchParams.get('eventName');
