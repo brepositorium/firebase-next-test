@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "daisyui": "^4.11.1",
     "firebase": "^10.11.1",
     "firebaseui": "^6.1.0",
@@ -19,6 +20,7 @@
     "react-firebaseui": "^6.0.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

@@ -1,10 +1,31 @@
 // app/api/event/route.ts
-
 import { db } from '../../../firebase/clientApp';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { NextRequest, NextResponse } from 'next/server';
+import Cors from 'cors';
+
+// Initialize the cors middleware
+const cors = Cors({
+  methods: ['GET', 'HEAD'],  // Allow only GET and HEAD methods through CORS
+  origin: '*',               // Adjust this to list specific origins or use '*' to allow all
+});
+
+// Helper function to run middleware
+function runMiddleware(request: NextRequest, fn: any) {
+  return new Promise((resolve, reject) => {
+    fn(request, (result: any) => {
+      if (result instanceof Error) {
+        return reject(result)
+      }
+      return resolve(result)
+    })
+  })
+}
 
 export async function GET(request: NextRequest) {
+    // Run the CORS middleware
+    await runMiddleware(request, cors);
+
     const eventName = request.nextUrl.searchParams.get('eventName');
     
     if (!eventName) {
@@ -38,7 +59,7 @@ export async function GET(request: NextRequest) {
             }
         });
     } catch (error) {
-        return new NextResponse(JSON.stringify({ error }), {
+        return new NextResponse(JSON.stringify({ error }), { // Better error handling
             status: 500,
             headers: {
                 'Content-Type': 'application/json'
