@@ -1,34 +1,16 @@
-// app/api/event/route.ts
 import { db } from '../../../firebase/clientApp';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { NextRequest, NextResponse } from 'next/server';
-import Cors from 'cors';
-
-// Initialize the cors middleware
-const cors = Cors({
-  methods: ['GET', 'HEAD'],  // Allow only GET and HEAD methods through CORS
-  origin: '*',               // Adjust this to list specific origins or use '*' to allow all
-});
-
-// Helper function to run middleware
-function runMiddleware(request: NextRequest, fn: any) {
-  return new Promise((resolve, reject) => {
-    fn(request, (result: any) => {
-      if (result instanceof Error) {
-        console.log("reject " + reject + "x!?" + resolve(result) + "y!?" + result)
-        return reject(result)
-      }
-      console.log("resolve " + resolve + "x!?" + resolve(result) + "y!?" + result)
-      return resolve(result)
-    })
-  })
-}
 
 export async function GET(request: NextRequest) {
-    // Run the CORS middleware
-    console.log("cors " + cors + "corsreq " + request)
-    await runMiddleware(request, cors);
+    // Manually set CORS headers
+    const response = new NextResponse();
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+    response.headers.set('Content-Type', 'application/json');
 
+    // Check for event name
     const eventName = request.nextUrl.searchParams.get('eventName');
     
     if (!eventName) {
